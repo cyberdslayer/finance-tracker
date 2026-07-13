@@ -491,6 +491,3 @@ For issues, feature requests, or questions, please create an issue on GitHub or 
 ---
 
 **Built with ❤️ by the Finance Tracker Team**
-#   f i n a n c e - t r a c k e r 
- 
- 
