@@ -25,7 +25,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Budget, budgetService, CreateBudgetPayload } from '../services/budgetService';
 
 interface BudgetListProps {
-  onUpdate?: () => void;
+  onUpdate?: number | (() => void);
 }
 
 export default function BudgetList({ onUpdate }: BudgetListProps) {

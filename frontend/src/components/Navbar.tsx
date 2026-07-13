@@ -199,10 +199,10 @@ export default function Navbar({ username, themeMode, onToggleTheme }: NavbarPro
             {username ? username[0].toUpperCase() : 'A'}
           </Avatar>
           <Box sx={{ overflow: 'hidden', flexGrow: 1 }}>
-            <Typography variant="body2" sx={{ fontWeight: 700, noWrap: true, color: 'text.primary' }}>
+            <Typography variant="body2" noWrap sx={{ fontWeight: 700, color: 'text.primary' }}>
               {username || 'Guest User'}
             </Typography>
-            <Typography variant="caption" sx={{ color: 'text.secondary', noWrap: true, display: 'block' }}>
+            <Typography variant="caption" noWrap display="block" sx={{ color: 'text.secondary' }}>
               View Account
             </Typography>
           </Box>

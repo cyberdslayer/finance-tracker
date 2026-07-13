@@ -16,13 +16,15 @@ import {
   Stack,
   Box,
   Chip,
+  CircularProgress,
+  IconButton,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Transaction, transactionService, CreateTransactionPayload } from '../services/transactionService';
 
 interface TransactionListProps {
-  onUpdate?: () => void;
+  onUpdate?: number | (() => void);
 }
 
 export default function TransactionList({ onUpdate }: TransactionListProps) {

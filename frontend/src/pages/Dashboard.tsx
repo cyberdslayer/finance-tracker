@@ -208,10 +208,10 @@ export default function Dashboard() {
                     }}
                   >
                     <Box sx={{ overflow: 'hidden', mr: 2 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 700, noWrap: true }}>
+                      <Typography variant="body2" noWrap sx={{ fontWeight: 700 }}>
                         {tx.category_display || tx.category}
                       </Typography>
-                      <Typography variant="caption" color="text.secondary" sx={{ display: 'block', noWrap: true }}>
+                      <Typography variant="caption" color="text.secondary" noWrap display="block">
                         {tx.description || 'No description'}
                       </Typography>
                       <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
