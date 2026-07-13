@@ -88,18 +88,38 @@ def transaction_summary(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def monthly_trend(request):
-    """Get monthly spending trend for the last 12 months"""
+    """Get monthly spending trend starting from this year or June for users with no history before that"""
     user = request.user
     today = datetime.now().date()
-    months_data = []
+    current_year = today.year
 
-    for i in range(11, -1, -1):
-        month_start = today - timedelta(days=today.day - 1) - timedelta(days=30 * i)
-        month_start = month_start.replace(day=1)
-        
-        if i > 0:
-            month_end = month_start + timedelta(days=30)
+    # Find the oldest transaction date
+    oldest_tx = Transaction.objects.filter(user=user).order_by('date').first()
+
+    if oldest_tx and oldest_tx.date.year < current_year:
+        # Standard: last 12 months
+        start_date = today - timedelta(days=today.day - 1) - timedelta(days=30 * 11)
+        start_date = start_date.replace(day=1)
+    else:
+        # User has no history before this year
+        oldest_date = oldest_tx.date if oldest_tx else today
+        if oldest_date.month >= 6:
+            start_date = datetime(current_year, 6, 1).date()
         else:
+            start_date = datetime(current_year, 1, 1).date()
+
+    months_data = []
+    curr = start_date
+
+    while curr <= today:
+        month_start = curr
+        if curr.month == 12:
+            next_month = datetime(curr.year + 1, 1, 1).date()
+        else:
+            next_month = datetime(curr.year, curr.month + 1, 1).date()
+
+        month_end = next_month - timedelta(days=1)
+        if month_end > today:
             month_end = today
 
         income = Transaction.objects.filter(
@@ -115,5 +135,7 @@ def monthly_trend(request):
             'income': float(income),
             'expenses': float(expenses),
         })
+
+        curr = next_month
 
     return Response(months_data)

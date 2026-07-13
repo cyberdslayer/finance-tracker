@@ -137,6 +137,28 @@ interface ProtectedLayoutProps {
 function ProtectedLayout({ children, themeMode, onToggleTheme }: ProtectedLayoutProps) {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    return localStorage.getItem('sidebar-collapsed') === 'true';
+  });
+
+  const toggleSidebar = () => {
+    setSidebarCollapsed((prev) => {
+      const next = !prev;
+      localStorage.setItem('sidebar-collapsed', String(next));
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+        e.preventDefault();
+        toggleSidebar();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   useEffect(() => {
     const token = getToken();
@@ -165,7 +187,13 @@ function ProtectedLayout({ children, themeMode, onToggleTheme }: ProtectedLayout
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default', flexDirection: { xs: 'column', md: 'row' } }}>
-      <Navbar username={user?.username} themeMode={themeMode} onToggleTheme={onToggleTheme} />
+      <Navbar
+        username={user?.username}
+        themeMode={themeMode}
+        onToggleTheme={onToggleTheme}
+        collapsed={sidebarCollapsed}
+        onToggleSidebar={toggleSidebar}
+      />
       <Box component="main" sx={{ flexGrow: 1, p: { xs: 2, md: 4 }, width: '100%' }}>
         <Box className="animate-fade-in">
           {children}
